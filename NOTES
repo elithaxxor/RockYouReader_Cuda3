@@ -1,0 +1,49 @@
+/* notes:
+ *
+ * FUNCTION QUALIFIES:
+ * __global__ (GPU) called by host and executed by device
+ * __device__ (CPU) called by device. rns on device and kerhknerl helper funtions
+ * __host__ normal host functoin
+ * ---> DATA BETWEEN THE DEVICES HAS TO BE COPIED BACK AND FORTH FROM HOST AND DEVICE SINCEE GPU CANNOT SEE THE SYSTEM RAM
+ *
+ *
+ * cudaMalloc--> allocates memory on the gpu. it takes one sof the devices pionters as teh first argument,
+ * and te second is hwo many byts to reserve
+ *
+ * cudaFree--> The function is used to free the memory that was allocated by cudaMalloc
+* --->REMEMBER TO ALAYAS FREE THE MfEMEORY WHEN DONE
+*
+* cudaMemcypy--> copies memory from the host to the device
+* -- the directions are sually either 'cudaMemcpyDeicetoHost' or 'cudaMemcpyHostToDevice'
+*
+* BASIC STEPS TO GET THE GPU TO DO SOMEHTING:
+* 1. Create two intergers for host
+* 2. allocate memory for copies of them on the device
+* 3. copy the kernal to add them toether
+* 4. copy the result back to  the  hosst memory
+* 5. print out the rsult the gpu computed
+* free the devices memory we allocated
+*
+* <<< >>> is used to call the FUNCTIONS FOR THE KERNAL
+*
+* THREAD VS BLOCK: A THREAD IS A SINGLE EXECUTION CONTEXT. A BLOCK IS A GROUP OF THREADS THAT RUN ON THE SAME STREAMING MULTIPROCESSOR
+* A BLOCK CANNOT HAVE MORE THAN 1024 THREADS PER BLOCK
+*/
+
+// MARK: THE START OF GPU PROCESSING
+
+
+
+/* e NVIDIA CUDA cores for parallel processing involves several steps. This includes setting up a CUDA environment,
+ * writing CUDA kernels, and managing data transfer between the host and the GPU. Below is a basic example that demonstrates
+ * how to achieve this using CUDA. The goal is to offload the search operation to the GPU.
+ *
+
+CUDA KERNAL:
+*  Each thread checks a portion of the buffer for the keyword. Marks the positions where the keyword is foun.
+ *  This function is the CUDA kernel that searches for a keyword in a buffer.
+ *  The kernel is launched with a grid of blocks, where each block has a number of threads.
+ *  Each thread searches for the keyword in a portion of the buffer.
+ *  If the keyword is found, the corresponding result is set to 1.
+ *  The results are stored in a separate array.
+ */

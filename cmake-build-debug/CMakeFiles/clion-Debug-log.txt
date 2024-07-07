@@ -1,0 +1,32 @@
+"C:\Program Files\JetBrains\CLion 2024.1.3\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2024.1.3/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\Users\arobot\Documents\RockYouReader_Cuda3 -B C:\Users\arobot\Documents\RockYouReader_Cuda3\cmake-build-debug
+CMake Error at C:/Program Files/JetBrains/CLion 2024.1.3/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:780 (message):
+  Compiling the CUDA compiler identification source file
+  "CMakeCUDACompilerId.cu" failed.
+
+  Compiler: C:/Program Files/NVIDIA GPU Computing
+  Toolkit/CUDA/v12.5/bin/nvcc.exe
+
+  Build flags:
+
+  Id flags: --keep;--keep-dir;tmp -v
+
+
+
+  The output was:
+
+  1
+
+  nvcc fatal : Cannot find compiler 'cl.exe' in PATH
+
+
+
+
+
+Call Stack (most recent call first):
+  C:/Program Files/JetBrains/CLion 2024.1.3/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)
+  C:/Program Files/JetBrains/CLion 2024.1.3/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:53 (__determine_compiler_id_test)
+  C:/Program Files/JetBrains/CLion 2024.1.3/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeDetermineCUDACompiler.cmake:135 (CMAKE_DETERMINE_COMPILER_ID)
+  CMakeLists.txt:2 (project)
+
+
+-- Configuring incomplete, errors occurred!
