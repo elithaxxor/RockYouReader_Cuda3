@@ -21,6 +21,7 @@ int count = 1000; // number of elements in the array
 // THE VARIABLE "ID" IS GOING TO BE A UNINQUE INDEX OF THE THREAD, SO MANY THREADS CAN RUN AT THE SAME TIME
 __global__ void vectorAdd(int* a, int* b, int* c, int size) {
     int id = blockIdx.x * blockDim.x + threadIdx.x; // the .x value is the index of the thread
+	printf(" the id is %d\n", id, "\n", "The size is %d\n", size, "\n\n" Block Index X: "%d\n", blockIdx.x, "\n", "Thread Index X: %d\n", threadIdx.x, "\n\n");
     if (i < size) {
         c[i] = a[i] + b[i];
         return;

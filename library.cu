@@ -41,32 +41,33 @@ void search_in_chunk(char *buffer, size_t buffer_size, char *keyword, size_t key
     int *h_results = (int *)malloc(buffer_size * sizeof(int));
     size_t keyword_bytes = keyword_length * sizeof(char);
 
-    printf("Allocating device memory...\n");
+    printf("[!] Allocating device memory...\n");
     cudaMalloc((void **)&d_buffer, buffer_size);
     cudaMalloc((void **)&d_keyword, keyword_bytes);
     cudaMalloc((void **)&d_results, buffer_size * sizeof(int));
 
-    printf("Copying data to device...\n");
+    printf("[!] Copying data to device...\n");
     cudaMemcpy(d_buffer, buffer, buffer_size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_keyword, keyword, keyword_bytes, cudaMemcpyHostToDevice);
 
     int block_size = 256;
     int num_blocks = (buffer_size + block_size - 1) / block_size;
 
-    printf("Launching kernel with %d blocks of %d threads each...\n", num_blocks, block_size);
+    printf("[!] Launching kernel with %d blocks of %d threads each...\n", num_blocks, block_size);
     search_kernel<<<num_blocks, block_size>>>(d_buffer, buffer_size, d_keyword, keyword_length, d_results);
 
-    printf("Copying results back to host...\n");
+    printf("[!] Copying results back to host...\n");
     cudaMemcpy(h_results, d_results, buffer_size * sizeof(int), cudaMemcpyDeviceToHost);
 
-    printf("Processing results...\n");
+    printf("[!] Processing results...\n");
     for (size_t i = 0; i < buffer_size; i++) {
         if (h_results[i] == 1) {
-            printf("Keyword found at position: %zu\n", chunk_start + i);
+            printf("[+] Keyword found at position: %zu\n", chunk_start + i);
         }
+        printf("[!].. still searching")
     }
 
-    printf("Freeing device memory...\n");
+    printf("[!] Freeing device memory...\n");
     cudaFree(d_buffer);
     cudaFree(d_keyword);
     cudaFree(d_results);
@@ -78,9 +79,9 @@ int main() {
     char filename[MAX_FILENAME_LENGTH];
 
     // Get the keyword from the user
-    printf("Enter the keyword to search: ");
+    printf("[?] Enter the keyword to search: ");
     if (fgets(keyword, MAX_KEYWORD_LENGTH, stdin) == NULL) {
-        perror("Error reading keyword");
+        perror("[-] Error reading keyword");
         return EXIT_FAILURE;
     }
     // Remove newline character if present
@@ -91,9 +92,9 @@ int main() {
     }
 
     // Get the filename from the user
-    printf("Enter the filename to search in: ");
+    printf("[?] Enter the filename to search in: ");
     if (fgets(filename, MAX_FILENAME_LENGTH, stdin) == NULL) {
-        perror("Error reading filename");
+        perror("[-] Error reading filename");
         return EXIT_FAILURE;
     }
     // Remove newline character if present
@@ -102,24 +103,28 @@ int main() {
         filename[filename_length - 1] = '\0';
     }
 
-    printf("Opening file: %s\n", filename);
+    printf("[+] Opening file: %s\n", filename);
+
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        perror("Error opening file");
+        perror("[-] Error opening file");
         return EXIT_FAILURE;
     }
 
+	//
     char *buffer = (char *)malloc(CHUNK_SIZE + keyword_length - 1);
     if (buffer == NULL) {
-        perror("Error allocating buffer");
+        perror("[-] Error allocating buffer");
         fclose(file);
         return EXIT_FAILURE;
     }
 
     size_t chunk_start = 0;
     size_t bytes_read;
+
+    // the loop will run function "search_in_chunk" which inturn will call the GPU for cuda calcuations
     while ((bytes_read = fread(buffer, 1, CHUNK_SIZE, file)) > 0) {
-        printf("Read %zu bytes from file...\n", bytes_read);
+        printf("[!] Read %zu bytes from file...\n", bytes_read);
         buffer[bytes_read] = '\0'; // Null-terminate the buffer
         search_in_chunk(buffer, bytes_read, keyword, keyword_length, chunk_start);
         chunk_start += bytes_read;
@@ -129,17 +134,12 @@ int main() {
         chunk_start -= keyword_length - 1;
     }
 
-    printf("Freeing host buffer memory...\n");
+    printf("[!] Freeing host buffer memory...\n");
     free(buffer);
     fclose(file);
 
-    printf("Search complete.\n");
+    printf("[!] Search complete.\n");
     return EXIT_SUCCESS;
 }
-
-__global__ void hello()
-{
-}
-
 
 
